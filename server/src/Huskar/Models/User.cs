@@ -29,8 +29,6 @@ namespace Huskar.Models
         public Nullable<int> DeptId { get; set; }
     
         public virtual Department Department { get; set; }
-        public virtual User Users1 { get; set; }
-        public virtual User User1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<StudentMark> StudentMarks { get; set; }
     }
