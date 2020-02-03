@@ -66,5 +66,17 @@ namespace MVCCRUDProject.Controllers
 
             }
 
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            using (DBModels db = new DBModels())
+            {
+                Employee emp = db.Employees.ToList().Where(f => f.EmployeeId == id).ToList().FirstOrDefault();
+                db.Employees.Remove(emp);
+                db.SaveChanges();
+                return Json(new { success = true, message = "Delete Successfully" }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
         }
     }

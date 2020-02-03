@@ -46,8 +46,11 @@
                     { "data": "Salary" },
                     {
                         "data": "EmployeeId", "render": function myFunction(data) {
-                            return "<a class='btn btn-primary'  role='button' href='#' style='margin-right: 10px;' onClick=PopupForm('@Url.Action("AddorEdit", "Employee")/" + data+"')> <i class='fa fa-pencil' ></i> Edit </a> <a class='btn btn-danger'  role='button' href='#'> <i class='fa fa-trash'></i> Delete </a>"
-                        }
+                            return "<a class='btn btn-primary'  role='button' href='#' style='margin-right: 10px;' onClick=PopupForm('@Url.Action("AddorEdit", "Employee")/" + data+"')> <i class='fa fa-pencil' ></i> Edit </a> <a class='btn btn-danger'  role='button' href='#' onClick=Delete("+data+")> <i class='fa fa-trash'></i> Delete </a>"
+                        },
+                        "searchable": false,
+                        "width": "200px",
+                        "orderable" : false
                     }
 
                 ]
@@ -95,13 +98,29 @@
                         if (data.success) {
                             Popup.remove();
                             $('#empTable').DataTable().ajax.reload();
-                            $.notify(data.message , "success");
+                            $.notify(data.message , "info");
                         }
                     }
                 });
             }
 
             return false;
+        }
+
+        function Delete (id){
+            if (confirm("Are you sure to delete this Employee record??"))
+            {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "Employee")/' + id,
+                    success: function (data) {
+                        if (data.success) {
+                            $('#empTable').DataTable().ajax.reload();
+                            $.notify(data.message, "warn");
+                        }
+                    }
+                });
+            }
         }
     </script>
 }
