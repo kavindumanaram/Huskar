@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -28,28 +29,42 @@ namespace MVCCRUDProject.Controllers
         [HttpGet]
         public ActionResult AddOrEdit(int id = 0)
         {
-            return View(new Employee());
+            if (id == 0)
+            {
+                return View(new Employee());
+            }
+            else
+            {
+                using (DBModels db = new DBModels())
+                {
+                    return View(db.Employees.Where(x => x.EmployeeId == id).FirstOrDefault());
+                }
+                }
         }
 
         [HttpPost]
         public ActionResult AddOrEdit(Employee emp)
         {
-            try
-            {
+
                 using (DBModels db = new DBModels())
+                {
+                if (emp.EmployeeId == 0)
                 {
                     db.Employees.Add(emp);
                     db.SaveChanges();
+                    return Json(new { success = true, message = "Saved Succesfully" }, JsonRequestBehavior.AllowGet);
+
                 }
-                return Json(new { success = true, message = "Saved Succesfully" }, JsonRequestBehavior.AllowGet);
+                else
+                {
+                    db.Entry(emp).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Update Succesfully" }, JsonRequestBehavior.AllowGet);
+                }
 
             }
-            catch (Exception ex)
-            {
 
-                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
 
         }
     }
-}

@@ -13,6 +13,7 @@
             <th>Position</th>
             <th>Age</th>
             <th>Salary</th>
+            <th>Action</th>
         </tr>
     </thead>
 </table>
@@ -42,13 +43,21 @@
                     { "data": "Name" },
                     { "data": "Position" },
                     { "data": "Age" },
-                    { "data": "Salary" }
+                    { "data": "Salary" },
+                    {
+                        "data": "EmployeeId", "render": function myFunction(data) {
+                            return "<a class='btn btn-primary'  role='button' href='#' style='margin-right: 10px;' onClick=PopupForm('@Url.Action("AddorEdit", "Employee")/" + data+"')> <i class='fa fa-pencil' ></i> Edit </a> <a class='btn btn-danger'  role='button' href='#'> <i class='fa fa-trash'></i> Delete </a>"
+                        }
+                    }
 
                 ]
                 ,
                 language: {
                     "emptyTable": "No data found, please click  <b>Add New</b> button"
-                }
+                },
+
+                "orderable": false,
+                "width" : "150px"
             });
 
         });
@@ -74,7 +83,6 @@
         }
 
         function SubmitForm(form) {
-            //$(form).removeData('validator');
             $(form).removeData("validator");
             $.validator.unobtrusive.parse(form);
 
