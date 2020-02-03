@@ -20,7 +20,7 @@ namespace MVCCRUDProject.Controllers
             var empList = new List<Employee>();
             using (DBModels db = new DBModels())
             {
-                 empList = db.Employees.ToList();
+                empList = db.Employees.ToList();
             }
             return Json(new { data = empList }, JsonRequestBehavior.AllowGet);
         }
@@ -32,9 +32,24 @@ namespace MVCCRUDProject.Controllers
         }
 
         [HttpPost]
-        public ActionResult AddOrEdit()
+        public ActionResult AddOrEdit(Employee emp)
         {
-            return View();
+            try
+            {
+                using (DBModels db = new DBModels())
+                {
+                    db.Employees.Add(emp);
+                    db.SaveChanges();
+                }
+                return Json(new { success = true, message = "Saved Succesfully" }, JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+
+                return Json(new { success = false, message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
         }
     }
 }

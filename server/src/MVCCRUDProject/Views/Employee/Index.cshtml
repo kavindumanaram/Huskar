@@ -5,7 +5,7 @@
 }
 
 <h2>Employee Data Table</h2>
-<a class="btn btn-secondary" style="margin-bottom:10px" role="button" href="#" onclick="PopupForm('@Url.Action("AddOrEdit", "Employee")')" > <i class="fas fa-plus-circle"></i> Add New</a>
+<a class="btn btn-success" style="margin-bottom:10px" role="button" href="#" onclick="PopupForm('@Url.Action("AddOrEdit", "Employee")')" > <i class="fas fa-plus-circle"></i> Add New</a>
 <table id="empTable" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
@@ -71,6 +71,25 @@
                     Popup.dialog('distroy').remove();
                 }
             });
+        }
+
+        function SubmitForm(form) {
+            //$(form).removeData('validator');
+            $(form).removeData("validator");
+            $.validator.unobtrusive.parse(form);
+
+            $.ajax({
+                "type": "POST",
+                "url": form.action,
+                data: $(form).serialize(),
+                success: function (data) {
+                    if (data.success) {
+                        Popup.dialog("close");
+                        dataTable.ajax.reload();
+                    }
+                }
+            });
+            return false;
         }
     </script>
 }
