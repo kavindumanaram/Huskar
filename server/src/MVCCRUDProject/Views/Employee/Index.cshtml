@@ -78,17 +78,20 @@
             $(form).removeData("validator");
             $.validator.unobtrusive.parse(form);
 
-            $.ajax({
-                "type": "POST",
-                "url": form.action,
-                data: $(form).serialize(),
-                success: function (data) {
-                    if (data.success) {
-                        Popup.dialog("close");
-                        dataTable.ajax.reload();
+            if ($(form).valid()) {
+                $.ajax({
+                    "type": "POST",
+                    "url": form.action,
+                    data: $(form).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            Popup.remove();
+                            $('#empTable').DataTable().ajax.reload();
+                        }
                     }
-                }
-            });
+                });
+            }
+
             return false;
         }
     </script>
