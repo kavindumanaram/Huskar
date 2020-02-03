@@ -87,6 +87,7 @@
                         if (data.success) {
                             Popup.remove();
                             $('#empTable').DataTable().ajax.reload();
+                            $.notify(data.message , "success");
                         }
                     }
                 });
